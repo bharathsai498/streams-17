@@ -1,6 +1,6 @@
+import model.Student;
+
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class Main {
         System.out.println(sum);
 
         List<String> godNames = Arrays.asList("Shiva", "Hanuman" , "Bramha", "Vishnu", "Krishna", "Vamana" ,"Bhairav");
-        godNames.stream().map((name) -> name.toUpperCase()).forEach(System.out::println);
+        godNames.stream().map(String::toUpperCase).forEach(System.out::println);
 
         //flatmap example
 
@@ -28,13 +28,12 @@ public class Main {
                 Arrays.asList(10, 3),
                 Arrays.asList(6, 20)
         );
-        Integer sumOfIntInMappedList = integer.stream().flatMap(list -> list.stream()).reduce(0, Integer::sum);
+        Integer sumOfIntInMappedList = integer.stream().flatMap(Collection::stream).reduce(0, Integer::sum);
         System.out.println(sumOfIntInMappedList);
 
         //Peek example
 
         List<Integer> peekExample = Arrays.asList(1, 4, 5, 8);
-        final List<Integer> collect = peekExample.stream().map(n -> n * n).peek(System.out::println).collect(Collectors.toList());
 //        System.out.println(collect.toString());
 
         //Distnict exmaple
@@ -43,7 +42,7 @@ public class Main {
 
         //skip
         List<Integer> skip = nonDuplicateSum.stream().skip(2).toList();
-        System.out.println(skip.toString());
+        System.out.println(skip);
 
         //limit
         System.out.println(nonDuplicateSum.stream().limit(3).toList());
@@ -63,5 +62,18 @@ public class Main {
         //sum
         int sumByFunction = peekExample.stream().mapToInt(Integer::intValue).sum();
         System.out.println(sumByFunction);
+
+        //Converting POJOs trasforming & reducing it to one value
+
+
+        List<Integer> marks = List.of(85, 90, 65, 96, 77, 95);
+        Student student = new Student("John", "101", marks);
+        List<Integer> marksFromStudentObj = student.getMarks();
+
+        int sumOfStudentJohn = marksFromStudentObj.stream().mapToInt(Integer::intValue).sum();
+        double avg = (double) (marksFromStudentObj.stream().mapToInt(Integer::intValue).sum()) / (double) marksFromStudentObj.stream().count();
+        System.out.println("Sum of the marks " + sumOfStudentJohn);
+        System.out.println("Avg marks " + String.format("%.2f", avg));
+
     }
 }
